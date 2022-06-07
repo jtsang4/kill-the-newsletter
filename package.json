@@ -25,10 +25,10 @@
     "prepare": "tsc"
   },
   "dependencies": {
-    "@leafac/css": "^0.0.1",
+    "@leafac/css": "0.0.1",
     "@leafac/html": "3.0.0",
-    "@leafac/sqlite": "^1.1.2",
-    "@leafac/sqlite-migration": "^1.0.3",
+    "@leafac/sqlite": "1.1.2",
+    "@leafac/sqlite-migration": "1.0.3",
     "@small-tech/auto-encrypt": "^2.0.5",
     "crypto-random-string": "^3.3.1",
     "express": "^4.17.1",
