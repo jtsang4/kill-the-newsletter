@@ -22,21 +22,22 @@
   "license": "MIT",
   "bin": "./build/index.mjs",
   "scripts": {
-    "postinstall": "(cd ./server/ && npm install && cd ..) && (cd ./static/ && npm install && cd ..)",
-    "prepare": "(cd ./server/ && npm run prepare && cd ..) && (cd ./static/ && npm run prepare && cd ..)",
-    "start": "nodemon --watch \"./server/**/*.mts\" --watch \"./static/{{prepare,leafac--javascript}.mjs,**/*.{png,jpeg,ico}}\" --watch \"./configuration/**/*.mjs\" --ext \"*\" --exec \"npm run prepare && node ./build/server/index.mjs ./configuration/development.mjs\"",
-    "start:clean:data": "npm run clean:data && npm run start",
-    "test": "prettier --check \"./README.md\" --check \"./package.json\" --check \"./server/**/*.mts\" --check \"./static/prepare.mjs\" --check \"./configuration/**/*.mjs\" --end-of-line auto && npm run prepare && cross-env TEST=kill-the-newsletter node ./build/server/index.mjs",
-    "clean:all": "npm run clean:build && npm run clean:data && npm run clean:node_modules",
+    "postinstall": "bun --bun ./scripts/prepare.mts",
+    "prepare": "bun run postinstall",
+    "start": "bun --watch src/index.mts",
+    "start:clean:data": "bun run clean:data && bun run start",
+    "test": "prettier --check \"./README.md\" --check \"./package.json\" --check \"./src/**/*.mts\" --check \"./scripts/prepare.mts\" --end-of-line auto && bun run prepare && cross-env TEST=kill-the-newsletter bun ./src/index.mts",
+    "clean:all": "bun run clean:build && bun run clean:data && bun run clean:node_modules",
     "clean:build": "shx rm -rf ./build/",
     "clean:data": "shx rm -rf ./data/",
-    "clean:node_modules": "shx rm -rf ./node_modules/ ./server/node_modules/ ./static/node_modules/",
-    "update": "npm-check-updates --upgrade && (cd ./server/ && npm-check-updates --upgrade && cd ..) && (cd ./static/ && npm-check-updates --upgrade && cd ..) && npm install"
+    "clean:node_modules": "shx rm -rf ./node_modules/",
+    "update": "bun update"
   },
   "engines": {
-    "node": ">=19"
+    "bun": ">=1"
   },
   "dependencies": {
+    "@fontsource/jetbrains-mono": "^4.5.11",
     "@leafac/caddy": "^1.0.5",
     "@leafac/css": "^0.8.1",
     "@leafac/html": "^4.0.0",
@@ -48,12 +49,22 @@
     "express": "^4.18.2",
     "lodash": "^4.17.21",
     "mailparser": "^3.6.2",
-    "smtp-server": "^3.11.0"
+    "smtp-server": "^3.11.0",
+    "tippy.js": "^6.3.7"
   },
   "caddy": "2.6.2",
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
+    "@types/express": "^4.17.15",
+    "@types/lodash": "^4.14.191",
+    "@types/mailparser": "^3.4.0",
+    "@types/node": "^18.11.18",
+    "@types/nodemailer": "^6.4.7",
+    "@types/smtp-server": "^3.5.7",
+    "bun-types": "^1.0.4-canary.20231004T140131",
     "caxa": "^3.0.1",
     "cross-env": "^7.0.3",
+    "esbuild": "^0.19.4",
     "got": "^12.5.3",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",

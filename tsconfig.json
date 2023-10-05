@@ -1,20 +1,22 @@
 {
   "compilerOptions": {
-    "rootDir": "./",
-    "outDir": "../build/server/",
-
-    "module": "ESNext",
+    "baseUrl": ".",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "target": "ESNext",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
 
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
 
-    "strict": true
+    "strict": true,
+    "types": ["bun-types"]
   }
 }
