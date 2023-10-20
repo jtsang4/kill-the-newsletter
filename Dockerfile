@@ -8,6 +8,7 @@ COPY . .
 RUN npm ci
 RUN npm dedupe --production
 
+ENV PORT=4000
 ENV WEB_PORT=4000
 ENV EMAIL_PORT=2525
 ENV BASE_URL=http://localhost:4000
