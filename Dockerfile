@@ -12,8 +12,15 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates tzdata
 COPY --from=builder /out/ktn /usr/local/bin/ktn
 COPY static/ ./static/
-COPY configs/development.json /app/config/config.json
-VOLUME ["/app/data", "/config"]
+VOLUME ["/app/data"]
+ENV KTN_HOSTNAME="" \
+    KTN_SYSTEM_ADMIN_EMAIL="" \
+    KTN_TLS_KEY="" \
+    KTN_TLS_CERTIFICATE="" \
+    KTN_DATA_DIRECTORY="/app/data/" \
+    KTN_ENVIRONMENT="production" \
+    KTN_SMTP_PORT="25" \
+    KTN_HTTP_PORT="8080" \
+    KTN_RUN_TYPE="all"
 EXPOSE 8080 25 2525
 ENTRYPOINT ["ktn"]
-CMD ["-config", "/app/config/config.json"]

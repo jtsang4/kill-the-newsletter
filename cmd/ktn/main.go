@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -18,13 +17,9 @@ import (
 )
 
 func main() {
-	var cfgPath string
-	flag.StringVar(&cfgPath, "config", "configs/development.json", "Path to JSON config file")
-	flag.Parse()
-
-	cfg, err := config.Load(cfgPath)
+	cfg, err := config.LoadEnv()
 	if err != nil {
-		log.Fatalf("load config: %v", err)
+		log.Fatalf("load config from env: %v", err)
 	}
 	if err := os.MkdirAll(cfg.DataDirectory, 0o755); err != nil {
 		log.Fatalf("mkdir data: %v", err)

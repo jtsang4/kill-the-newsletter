@@ -19,31 +19,29 @@ This repository ships a ready-to-use Docker image plus a `compose.yml` sample so
 
 ```
 ./data/        # Persistent application data (SQLite + attachments)
-./config/      # Configuration files and certificates (mounted read-only to /app/config)
 ```
 
-2. Create `./config/config.json` (production example):
+2. Run the container (production example):
 
-```json
-{
-  "hostname": "newsletters.example.com",
-  "tls": {
-    "key": "/app/config/tls/tls.key",
-    "certificate": "/app/config/tls/tls.crt"
-  },
-  "dataDirectory": "/app/data/",
-  "environment": "production",
-  "smtpPort": 25,
-  "httpAddr": ":8080",
-  "runType": "all"
-}
+```bash
+docker run -d \
+  --name kill-the-newsletter \
+  -p 8080:8080 \
+  -p 25:25 \
+  -v "$PWD/data:/app/data" \
+  -e KTN_HOSTNAME=newsletters.example.com \
+  -e KTN_ENVIRONMENT=production \
+  -e KTN_SMTP_PORT=25 \
+  -e KTN_HTTP_PORT=8080 \
+  -e KTN_RUN_TYPE=all \
+  ghcr.io/jtsang4/kill-the-newsletter:latest
 ```
 
 Notes:
 
-- `hostname` must match the domain used in DNS MX records.
-- `smtpPort` defaults to `25` in production and `2525` in development, but can be set explicitly.
-- `tls.key` and `tls.certificate` point to the SMTP STARTTLS certificate and key (optional but strongly recommended). Mount the certificate files inside the container, e.g. `./config/tls/tls.crt` and `./config/tls/tls.key`.
+- `KTN_HOSTNAME` must match the domain used in DNS MX records.
+- `KTN_SMTP_PORT` defaults to `25` in production and `2525` in development if unset.
+- For SMTP STARTTLS, mount certificate files and set `KTN_TLS_CERTIFICATE` and `KTN_TLS_KEY` to their in-container paths.
 - The HTTP server does not include TLS; see “Reverse proxy / HTTPS”.
 
 3. Run the container:
@@ -54,7 +52,7 @@ docker run -d \
   -p 8080:8080 \
   -p 25:25 \
   -v "$PWD/data:/app/data" \
-  -v "$PWD/config:/app/config:ro" \
+  -e KTN_HOSTNAME=newsletters.example.com \
   ghcr.io/jtsang4/kill-the-newsletter:latest
 ```
 
@@ -76,7 +74,12 @@ services:
       - '2525:2525' # SMTP (development)
     volumes:
       - ./data:/app/data
-      - ./config:/app/config:ro
+    environment:
+      - KTN_HOSTNAME=newsletters.example.com
+      - KTN_ENVIRONMENT=production
+      - KTN_SMTP_PORT=25
+      - KTN_HTTP_PORT=8080
+      - KTN_RUN_TYPE=all
     healthcheck:
       test:
         [
@@ -88,7 +91,7 @@ services:
       retries: 3
 ```
 
-Important: the application only listens on one SMTP port—the one set in `config.json` as `smtpPort`. The dual `EXPOSE 25 2525` in the `Dockerfile` only documents capabilities. In production you typically publish `25:25`; in development you can expose `2525:2525` and set `environment` to `development` (or set `smtpPort: 2525`).
+Important: the application only listens on one SMTP port—the one set via `KTN_SMTP_PORT`. The dual `EXPOSE 25 2525` in the `Dockerfile` only documents capabilities. In production you typically publish `25:25`; in development you can expose `2525:2525` and set `KTN_ENVIRONMENT=development` (or set `KTN_SMTP_PORT=2525`).
 
 Start with:
 
@@ -96,31 +99,27 @@ Start with:
 docker compose -f compose.yml up -d
 ```
 
-## Configuration (`/app/config/config.json`)
+## Configuration (Environment Variables)
 
-The structure matches `internal/config/config.go`:
+Set the following environment variables (names map to `internal/config/config.go`):
 
-- `hostname` (required): Public domain name.
-- `systemAdministratorEmail` (optional): Address shown for administrative contact.
-- `tls.key` / `tls.certificate` (optional): Paths to SMTP STARTTLS key and certificate.
-- `dataDirectory`: Storage location; inside Docker use `/app/data/`.
-- `environment`: `production` or `development` (default: `production`).
-- `smtpPort`: SMTP listening port. Defaults to `25` in production and `2525` in development if omitted.
-- `httpAddr`: HTTP listening address, defaults to `:8080`.
-- `runType`: `server`, `email`, `background`, or `all` (default).
+- `KTN_HOSTNAME` (required): Public domain name.
+- `KTN_SYSTEM_ADMIN_EMAIL` (optional): Address shown for administrative contact.
+- `KTN_TLS_KEY` / `KTN_TLS_CERTIFICATE` (optional): Paths to SMTP STARTTLS key and certificate inside the container/host.
+- `KTN_DATA_DIRECTORY` (optional, default: `./data/` or `/app/data/` in Docker examples).
+- `KTN_ENVIRONMENT` (optional): `production` or `development` (default: `production`).
+- `KTN_SMTP_PORT` (optional): SMTP listening port. Defaults to `25` in production and `2525` in development if unset.
+- `KTN_HTTP_PORT` (optional, default: `8080`).
+- `KTN_RUN_TYPE` (optional): `server`, `email`, `background`, or `all` (default).
 
 Development example:
 
-```json
-{
-  "hostname": "localhost",
-  "tls": { "key": "", "certificate": "" },
-  "dataDirectory": "/app/data/",
-  "environment": "development",
-  "smtpPort": 2525,
-  "httpAddr": ":8080",
-  "runType": "all"
-}
+```bash
+export KTN_HOSTNAME=localhost
+export KTN_ENVIRONMENT=development
+export KTN_SMTP_PORT=2525
+export KTN_HTTP_PORT=8080
+export KTN_RUN_TYPE=all
 ```
 
 ## Cloudflare DNS Example (`example.com`)
@@ -179,9 +178,9 @@ The HTTP server listens on `:8080` without TLS. Run a reverse proxy (Nginx, Cadd
   - Ensure Cloudflare A/AAAA records are **DNS only**.
   - Confirm the MX record points to `hostname`, and TCP 25 is reachable.
   - Check whether your provider blocks port 25.
-  - Verify `config.json` contains the correct `hostname` and `smtpPort`.
+  - Verify `KTN_HOSTNAME` and `KTN_SMTP_PORT` are set correctly.
 - **Development SMTP (`2525`) unreachable**:
-  - Set `environment: development` or explicitly `smtpPort: 2525`.
+  - Set `KTN_ENVIRONMENT=development` or explicitly `KTN_SMTP_PORT=2525`.
   - Publish the port mapping `2525:2525` in Docker / Compose.
 - **Web UI unavailable**:
   - Confirm the `8080:8080` mapping and health check status.
@@ -193,7 +192,8 @@ The HTTP server listens on `:8080` without TLS. Run a reverse proxy (Nginx, Cadd
 docker build -t kill-the-newsletter:local .
 docker run -d \
   -p 8080:8080 -p 25:25 \
-  -v "$PWD/data:/app/data" -v "$PWD/config:/app/config:ro" \
+  -v "$PWD/data:/app/data" \
+  -e KTN_HOSTNAME=localhost -e KTN_ENVIRONMENT=development -e KTN_SMTP_PORT=2525 -e KTN_HTTP_PORT=8080 -e KTN_RUN_TYPE=all \
   kill-the-newsletter:local
 ```
 

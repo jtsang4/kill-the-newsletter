@@ -1,8 +1,0 @@
-{
-  "hostname": "localhost",
-  "tls": { "key": "", "certificate": "" },
-  "dataDirectory": "./data/",
-  "environment": "development",
-  "httpAddr": ":8080",
-  "runType": "all"
-}
