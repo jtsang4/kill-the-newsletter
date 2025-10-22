@@ -1,0 +1,11 @@
+.git
+.gitignore
+.github/
+cmd/e2e/
+compose.yml
+**/*.log
+.vscode/
+.idea/
+Dockerfile
+build/
+data/
