@@ -19,11 +19,7 @@ import (
 
 func main() {
 	var cfgPath string
-	var typ string
-	var httpAddr string
 	flag.StringVar(&cfgPath, "config", "configs/development.json", "Path to JSON config file")
-	flag.StringVar(&typ, "type", "all", "Which component to run: server|email|background|all")
-	flag.StringVar(&httpAddr, "http-addr", ":8080", "HTTP listen address")
 	flag.Parse()
 
 	cfg, err := config.Load(cfgPath)
@@ -44,11 +40,11 @@ func main() {
 	defer cancel()
 
 	var httpSrv *http.Server
-	if typ == "server" || typ == "all" {
+	if cfg.RunType == "server" || cfg.RunType == "all" {
 		hs := httpserver.New(cfg, dbx)
-		httpSrv = &http.Server{Addr: httpAddr, Handler: hs}
+		httpSrv = &http.Server{Addr: cfg.HTTPAddr, Handler: hs}
 		go func() {
-			log.Printf("HTTP listening on %s", httpAddr)
+			log.Printf("HTTP listening on %s", cfg.HTTPAddr)
 			if err := httpSrv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 				log.Fatalf("http: %v", err)
 			}
@@ -56,7 +52,7 @@ func main() {
 	}
 
 	var smtpSrv interface{ Close() error }
-	if typ == "email" || typ == "all" {
+	if cfg.RunType == "email" || cfg.RunType == "all" {
 		ss, err := smtpserver.Start(cfg, dbx)
 		if err != nil {
 			log.Fatalf("smtp: %v", err)
@@ -64,7 +60,7 @@ func main() {
 		smtpSrv = ss
 	}
 
-	if typ == "background" || typ == "all" {
+	if cfg.RunType == "background" || cfg.RunType == "all" {
 		worker.Start(ctx, cfg, dbx)
 	}
 

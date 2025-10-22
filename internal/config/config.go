@@ -23,6 +23,8 @@ type Config struct {
 	SMTPPort                 int     `json:"smtpPort"`
 	HSTSPreload              *bool   `json:"hstsPreload,omitempty"`
 	ExtraCaddyfile           *string `json:"extraCaddyfile,omitempty"`
+	HTTPAddr                 string  `json:"httpAddr"`
+	RunType                  string  `json:"runType"`
 }
 
 type AppEnv string
@@ -67,6 +69,12 @@ func Load(path string) (Config, error) {
 		} else {
 			cfg.SMTPPort = 25
 		}
+	}
+	if cfg.HTTPAddr == "" {
+		cfg.HTTPAddr = ":8080"
+	}
+	if cfg.RunType == "" {
+		cfg.RunType = "all"
 	}
 	return cfg, nil
 }
