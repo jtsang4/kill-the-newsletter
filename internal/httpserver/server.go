@@ -209,14 +209,14 @@ func (s *Server) handleFeedXML(w http.ResponseWriter, r *http.Request, pub strin
 		return
 	}
 	w.Header().Set("X-Robots-Tag", "none")
-	// rate limit: 10 visualizations/hour
+	// rate limit: 1000 visualizations/hour
 	since := time.Now().Add(-1 * time.Hour).UTC().Format(time.RFC3339Nano)
 	count, err := db.CountRecentVisualizations(ctx, s.db.SQL, f.ID, since)
 	if err != nil {
 		s.serverError(w, r, err)
 		return
 	}
-	if count > 10 {
+	if count > 1000 {
 		w.WriteHeader(http.StatusTooManyRequests)
 		s.render(w, "rate_limit.html", nil)
 		return
