@@ -1,0 +1,17 @@
+services:
+  ktn:
+    image: ghcr.io/jtsang4/kill-the-newsletter:latest
+    container_name: kill-the-newsletter
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   # HTTP
+      - "25:25"      # SMTP (production)
+      - "2525:2525"  # SMTP (development)
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
