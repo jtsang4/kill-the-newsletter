@@ -1,0 +1,75 @@
+{{ define "error.html" }}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Server error · Kill the Newsletter!</title>
+    <link rel="icon" href="/favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#3b82f6',
+              'primary-dark': '#2563eb',
+              secondary: '#6b7280',
+              background: '#ffffff',
+              surface: '#f9fafb',
+              border: '#e5e7eb',
+              text: '#111827',
+              'text-muted': '#6b7280'
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-background text-text min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <main class="text-center space-y-8">
+        <div class="space-y-4">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h1 class="text-4xl font-bold text-text tracking-tight">Server Error</h1>
+          <p class="text-xl text-text-muted">
+            Something went wrong on our end. We're sorry for the inconvenience.
+          </p>
+        </div>
+
+        <div class="bg-surface rounded-2xl p-8 border border-border">
+          <h2 class="text-2xl font-semibold text-text mb-4">Need Help?</h2>
+          <p class="text-text-muted mb-6">
+            Please report this issue to our support team and we'll look into it as soon as possible.
+          </p>
+          <a
+            href="mailto:kill-the-newsletter@leafac.com"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Contact Support
+          </a>
+        </div>
+
+        <div class="pt-8">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 text-text-muted hover:text-text transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+          </a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+{{ end }}

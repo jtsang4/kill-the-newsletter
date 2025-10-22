@@ -1,0 +1,78 @@
+{{ define "not_found.html" }}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Not found · Kill the Newsletter!</title>
+    <link rel="icon" href="/favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#3b82f6',
+              'primary-dark': '#2563eb',
+              secondary: '#6b7280',
+              background: '#ffffff',
+              surface: '#f9fafb',
+              border: '#e5e7eb',
+              text: '#111827',
+              'text-muted': '#6b7280'
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-background text-text min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <main class="text-center space-y-8">
+        <div class="space-y-4">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h1 class="text-4xl font-bold text-text tracking-tight">Not Found</h1>
+          <p class="text-xl text-text-muted">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+        </div>
+
+        <div class="bg-surface rounded-2xl p-8 border border-border">
+          <h2 class="text-2xl font-semibold text-text mb-4">Looking for a Newsletter Entry?</h2>
+          <p class="text-text-muted mb-6">
+            If you expected to see the web version of a newsletter entry, you may be interested in the answer to the question:
+          </p>
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <p class="text-blue-900 font-medium">
+              "Why are old entries disappearing?"
+            </p>
+            <p class="text-blue-700 text-sm mt-2">
+              To keep the feed under a size limit compatible with some readers, old entries are deleted when new emails arrive and the feed would exceed the limit.
+            </p>
+          </div>
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Back to Home
+          </a>
+        </div>
+
+        <div class="text-center">
+          <p class="text-text-muted text-sm">
+            Need help? <a href="mailto:kill-the-newsletter@leafac.com" class="text-primary hover:text-primary-dark transition-colors">Contact Support</a>
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+{{ end }}
