@@ -1,5 +1,7 @@
 # Kill the Newsletter!
 
+> This project is a complete reimplementation of [`leafac/kill-the-newsletter`](https://github.com/leafac/kill-the-newsletter) written in Go with first-class Docker deployment support.
+
 Kill the Newsletter! is a self-hosted service that transforms newsletter emails into Atom feeds. Create a unique inbox for each subscription, receive the newsletter by mail, and read it via feed readers or the built-in web UI.
 
 This repository ships a ready-to-use Docker image plus a `compose.yml` sample so you can run the HTTP and SMTP servers in either production or development mode.
@@ -69,14 +71,18 @@ services:
     container_name: kill-the-newsletter
     restart: unless-stopped
     ports:
-      - "8080:8080"   # HTTP
-      - "25:25"      # SMTP (production)
-      - "2525:2525"  # SMTP (development)
+      - '8080:8080' # HTTP
+      - '25:25' # SMTP (production)
+      - '2525:2525' # SMTP (development)
     volumes:
       - ./data:/app/data
       - ./config:/app/config:ro
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ >/dev/null 2>&1 || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          'wget -qO- http://127.0.0.1:8080/ >/dev/null 2>&1 || exit 1',
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -122,6 +128,7 @@ Development example:
 Goal: allow third parties to deliver newsletters to your server on port 25 while keeping the web UI reachable.
 
 1. In the Cloudflare DNS dashboard:
+
    - **A record**:
      - Name: `newsletters`
      - IPv4: your server’s public IP
@@ -134,6 +141,7 @@ Goal: allow third parties to deliver newsletters to your server on port 25 while
      - Remember: Cloudflare never proxies MX, but the host it targets must resolve to “DNS only” A/AAAA records.
 
 2. Firewalls and ports:
+
    - Allow inbound **TCP 25** (SMTP) and **TCP 8080** (HTTP) on the server.
    - Many VPS providers block port 25 by default. Use a provider that permits SMTP or request an unblocking exception.
 
@@ -141,7 +149,7 @@ Goal: allow third parties to deliver newsletters to your server on port 25 while
    - Users can visit `http://newsletters.example.com:8080/` directly.
    - For HTTPS/443, put a reverse proxy in front (see below).
 
-Tip: the service only *receives* mail and serves feeds; it does not send email. SPF, DKIM, and DMARC records are therefore optional for this domain.
+Tip: the service only _receives_ mail and serves feeds; it does not send email. SPF, DKIM, and DMARC records are therefore optional for this domain.
 
 ## Reverse Proxy / HTTPS
 
