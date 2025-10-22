@@ -1,0 +1,108 @@
+{{ define "index.html" }}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kill the Newsletter!</title>
+    <meta name="description" content="Convert email newsletters into Atom feeds" />
+    <link rel="icon" href="/favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#3b82f6',
+              'primary-dark': '#2563eb',
+              secondary: '#6b7280',
+              background: '#ffffff',
+              surface: '#f9fafb',
+              border: '#e5e7eb',
+              text: '#111827',
+              'text-muted': '#6b7280'
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-background text-text min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <header class="text-center mb-16">
+        <h1 class="text-5xl font-bold text-text mb-3 tracking-tight">Kill the Newsletter!</h1>
+        <p class="text-lg text-text-muted">Convert email newsletters into Atom feeds</p>
+      </header>
+
+      <main class="space-y-16">
+        <section class="bg-surface rounded-2xl p-8 border border-border">
+          <form method="post" action="/" class="space-y-6">
+            <div>
+              <label for="title" class="block text-sm font-medium text-text mb-2">Feed Title</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Enter your feed title…"
+                required
+                maxlength="200"
+                class="w-full px-4 py-3 border border-border rounded-lg bg-background text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full sm:w-auto px-8 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+            >
+              Create Feed
+            </button>
+          </form>
+        </section>
+
+        <div class="grid gap-12">
+          <section class="bg-surface rounded-2xl p-8 border border-border">
+            <h2 class="text-2xl font-semibold text-text mb-4">How does Kill the Newsletter! work?</h2>
+            <p class="text-text-muted leading-relaxed">
+              Create a feed with the form above and Kill the Newsletter! provides you with an email address and an Atom feed. Emails that are received at that address are turned into entries in that feed. Sign up to a newsletter with that address and use your feed reader to subscribe to that feed.
+            </p>
+          </section>
+
+          <section class="bg-surface rounded-2xl p-8 border border-border">
+            <h2 class="text-2xl font-semibold text-text mb-4">How do I confirm my newsletter subscription?</h2>
+            <p class="text-text-muted leading-relaxed">
+              In most cases when you subscribe to a newsletter the publisher sends you an email with a confirmation link. Kill the Newsletter! converts that email into a feed entry as usual, so it appears in your feed reader and you may follow the confirmation link from there. Some publishers want you to reply to an email—this is not supported; consider contacting them or forwarding from your regular email as a workaround.
+            </p>
+          </section>
+
+          <section class="bg-surface rounded-2xl p-8 border border-border">
+            <h2 class="text-2xl font-semibold text-text mb-4">Why can't I subscribe to a newsletter with my Kill the Newsletter! email?</h2>
+            <p class="text-text-muted leading-relaxed">
+              Some publishers block Kill the Newsletter!. You may contact them and ask them to reconsider. As a workaround, subscribe with your regular address and set up a forwarder to your Kill the Newsletter! address.
+            </p>
+          </section>
+
+          <section class="bg-surface rounded-2xl p-8 border border-border">
+            <h2 class="text-2xl font-semibold text-text mb-4">How do I share a Kill the Newsletter! feed?</h2>
+            <p class="text-text-muted leading-relaxed">
+              You don't. The feed includes the identifier for the email address and anyone who has access to it may unsubscribe you or send spam. Share the service instead and let people create their own feeds.
+            </p>
+          </section>
+
+          <section class="bg-surface rounded-2xl p-8 border border-border">
+            <h2 class="text-2xl font-semibold text-text mb-4">Why are old entries disappearing?</h2>
+            <p class="text-text-muted leading-relaxed">
+              To keep the feed under a size limit compatible with some readers, old entries are deleted when new emails arrive and the feed would exceed the limit.
+            </p>
+          </section>
+
+          <section class="bg-surface rounded-2xl p-8 border border-border">
+            <h2 class="text-2xl font-semibold text-text mb-4">Why isn't my feed updating?</h2>
+            <p class="text-text-muted leading-relaxed">
+              Send an email to your feed address and wait a few minutes. If it shows up, the issue is on the publisher side; otherwise contact support.
+            </p>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+{{ end }}

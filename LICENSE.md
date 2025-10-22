@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 Leandro Facchinetti <license@leafac.com> (https://leafac.com)
+Copyright (c) 2025 James Tsang <info@jtsang.me> (https://jtsang.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,0 +1,6 @@
+{
+  "hostname": "localhost",
+  "tls": { "key": "", "certificate": "" },
+  "dataDirectory": "./data/",
+  "environment": "development"
+}
